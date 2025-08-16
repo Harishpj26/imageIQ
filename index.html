@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classification and Keypoints</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            margin: 20px 0;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 2px solid #ccc;
+        }
+
+        .result h2 {
+            color: #333;
+        }
+
+        .keypoints-image {
+            margin-top: 20px;
+            max-width: 100%;
+            max-height: 300px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Classification and Keypoint Detection</h1>
+        <form method="POST" enctype="multipart/form-data" action="/predict">
+            <label for="file">Upload an Image:</label><br>
+            <input type="file" name="file" id="file" required><br><br>
+            <button type="submit">Upload and Predict</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            <h2>Prediction Results:</h2>
+            <ul>
+                {% for label, confidence in prediction.items() %}
+                <li>{{ label }}: {{ confidence }}%</li>
+                {% endfor %}
+            </ul>
+            <h2>Keypoints Detected:</h2>
+            <img src="data:image/jpeg;base64,{{ keypoints_image }}" alt="Keypoints Image" class="keypoints-image">
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

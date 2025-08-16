@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            width: 100%;
+            background-color: #560b8f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin: -25px -20px 20px; 
+            font-family: Poppins, sans-serif;
+            height: 35px;
+            vertical-align: middle;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 20px auto;
+            max-width: 90%;
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 300px; 
+        }
+
+        .column img {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            max-width: 250px; 
+            max-height: 250px;
+            object-fit: cover; 
+        }
+
+        .bar-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px; 
+            text-align: left;
+        }
+
+        .bar {
+            height: 30px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .bar-label {
+            margin-left: -5px;
+            margin-right: 15px; 
+            width: 100px;
+            color: black; 
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            position: relative;
+            padding-right: 28px; 
+        }
+
+        .bar-fill span {
+            font-size: 0.6rem; 
+            position: absolute;
+            right: 2px; 
+            bottom: 5px; 
+        }
+
+        .label {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: 1px solid #560b8f;
+            border-radius: 10px;
+            background-color: #fff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .cursorFollower, .cursorFollowerDot {
+            position: absolute;
+            pointer-events: none;  
+            z-index: 9999;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.7); 
+            transition: all 0.1s ease;
+        }
+
+        .cursorFollower {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #560b8f; 
+            transform: translate(-50%, -50%);  
+        }
+
+        .cursorFollowerDot {
+            width: 8px;
+            height: 8px;
+            background-color: #560b8f; 
+            transform: translate(-50%, -50%);
+        }
+
+        
+   footer {
+    text-align: center;
+    background: #333;
+    color: white;
+    padding: 10px 0;
+    font-size: 0.9rem;
+    width: 1256.5px; 
+    height: 50px;
+    position: relative; 
+    bottom: 0; 
+    margin-left: -20px;
+}
+    </style>
+</head>
+<body>
+    <h1>IMAGE CLASSIFICATION RESULT</h1>
+
+    <div class="main-container">
+        <!-- Original Image -->
+        <div class="column">
+            <img src="data:image/jpeg;base64,{{ original_image }}" alt="Original Image">
+            <div class="label">Original Image</div>
+        </div>
+
+        <!-- Predicted Image -->
+        <div class="column">
+            <img src="data:image/jpeg;base64,{{ keypoints_image }}" alt="Predicted Image">
+            <div class="label">Image with Keypoints</div>
+        </div>
+
+        <!-- Predictions (Bar Graph) -->
+        <div class="column">
+            <div class="bar-container">
+                {% set color_cycle = ['#560b8f', '#F39C12', '#3498DB', '#E74C3C', '#2ECC71'] %}
+                {% set total_confidence = prediction.values() | sum %}
+                {% for label, confidence in prediction.items() %}
+                    {% set percentage = (confidence / total_confidence) * 100 %}
+                
+                    <div class="bar">
+                        <div class="bar-label">{{ label | upper }}</div>
+                        <div class="bar-fill" style="width: {{ percentage }}%; background-color: {{ color_cycle[loop.index0 % color_cycle|length] }};">
+                            <span>{{ percentage | round(2) }}%</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="label">Predictions</div>
+        </div>
+    </div>
+
+    <!-- Text Section Below the Grid -->
+    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; margin-top: 20px; height: 200px;"> 
+        <h2 style="font-weight: bold;">THE UPLOADED IMAGE IS</h2> 
+        <p style="font-size: 20px; font-weight: bold; padding: 10px 20px; display: inline-block; border: 2px solid #560b8f; border-radius: 10px; color: #560b8f;"> 
+            {% set sorted_predictions = prediction.items() | sort(attribute=1, reverse=true) %}
+            {% set max_label, max_confidence = sorted_predictions[0] %}
+            <!-- {{ max_label|upper }} ({{ (max_confidence / prediction.values()|sum * 100)|round(2) }}%) -->
+            {{ max_label|upper }}
+        </p> 
+    </div>
+
+    <span id="cursorFollower" class="cursorFollower"></span>
+    <span id="cursorFollowerDot" class="cursorFollowerDot"></span>
+
+    <footer>
+        &copy; 2024 ImageIQ. All rights reserved.
+    </footer>
+    <script>
+        var xp = 0, mouseX = 0;
+         var yp = 0, mouseY = 0;
+         var xpDot = 0, mouseXDot = 0;
+         var ypDot = 0, mouseYDot = 0;
+ 
+         const cursorFollower = document.querySelector(".cursorFollower");
+         const cursorFollowerDot = document.querySelector(".cursorFollowerDot");
+ 
+         document.addEventListener("mousemove", (e) => {
+             mouseX = e.pageX;
+             mouseY = e.pageY;
+         });
+ 
+         setInterval(function () {
+             xp += (mouseX - xp) / 10;
+             yp += (mouseY - yp) / 10;
+ 
+             cursorFollower.style.left = xp + "px";
+             cursorFollower.style.top = yp + "px";
+         }, 20);
+ 
+         setInterval(function () {
+             xpDot += (mouseX - xpDot) / 15;
+             ypDot += (mouseY - ypDot) / 15;
+ 
+             cursorFollowerDot.style.left = xpDot + "px";
+             cursorFollowerDot.style.top = ypDot + "px";
+         }, 15);
+     </script>
+</body>
+</html>

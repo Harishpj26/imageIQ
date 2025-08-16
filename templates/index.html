@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classification & Keypoints</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <!-- Top Nav Bar -->
+        <nav class="topnav">
+            <!-- Left Side: ImageIQ Title + Social Media Links -->
+            <div class="left-nav">
+                <h1 class="site-title">ImageIQ</h1>
+                <div class="social-links">
+                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+                
+            </div>
+    
+            <!-- Right Side: Navigation Links -->
+            <div class="right-nav">
+                <a href="{{ url_for('home') }}">Home</a>  <!-- Use Flask's url_for for the Home route -->
+                <a href="#about-us">About Us</a>
+                <a href="#testimonials">Reviews</a>
+            </div>
+        </nav>
+    
+        <!-- Main Content -->
+        <div class="hero-content">
+            <h1>Image Classification and Keypoint Detection</h1>
+            <p>Upload your images and explore AI-powered predictions with keypoint visualizations.</p>
+        </div>
+    </header>
+    
+
+    <main>
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="content">
+                <h3>What is Image Classification ?</h3>
+                <p>Image Classification is a type of computer vision task that involves categorizing an image
+                     into predefined classes or labels based on its content. The goal is for an AI model to 
+                     automatically identify the objects, scenes, or features present in an image, and assign
+                      it to one of the defined categories. Image classification enables machines to understand 
+                      and interpret visual data in ways similar to human perception.</p>
+            </div>
+            <img src="{{ url_for('static', filename='side.gif') }}" alt="Example classification result">
+        </div>
+
+        <!-- Stages Section -->
+        <div class="hero_2">
+            <section class="stages">
+                <h2>Stages of Image Classification</h2>
+                <div class="tracker">
+                    <div class="stage">
+                        <div class="circle">1</div>
+                        <h3>Upload Image</h3>
+                        <p>Start by uploading an image you want to classify. The model accepts a wide range of image formats.</p>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="stage">
+                        <div class="circle">2</div>
+                        <h3>Process Image</h3>
+                        <p>Our model processes the uploaded image using CNN, identifying key features and regions of interest.</p>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="stage">
+                        <div class="circle">3</div>
+                        <h3>Generate Predictions</h3>
+                        <p>The model classifies the given image into predefined categories relavant to CIFAR with their probabilities.</p>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="stage">
+                        <div class="circle">4</div>
+                        <h3>Keypoint Visualization</h3>
+                        <p>Visualize important keypoints on your image for additional insights.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Upload Form -->
+        <form action="/predict" method="POST" enctype="multipart/form-data" style="text-align: center;">
+            <label for="file" style="display: block; font-weight: bold; margin-bottom: 10px;">
+                UPLOAD YOUR IMAGE HERE
+            </label>
+            <input 
+                type="file" 
+                name="file" 
+                id="file" 
+                accept="image/*" 
+                required 
+                style="margin-bottom: 15px; 
+                       display: block; 
+                       margin: 0 auto; 
+                       padding: 10px 20px; 
+                       font-size: 1rem; 
+                       border: 2px solid #560b8f; 
+                       border-radius: 5px; 
+                       background-color: #f9f9f9; 
+                       cursor: pointer; 
+                       transition: all 0.3s ease; 
+                       width: 100%; 
+                       max-width: 300px;">
+            <button type="submit" style="background: #560b8f; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; margin-top: 10px;">
+                Classify Image
+            </button>
+        </form>
+
+        <!-- Features Section -->
+        <section class="features">
+            <h2>Why Choose Our App?</h2>
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <img src="{{ url_for('static', filename='A.gif') }}" alt="Accuracy">
+                    <h3>High Accuracy</h3>
+                    <p>State-of-the-art AI models ensure precise predictions every time.</p>
+                </div>
+                <div class="feature-card">
+                    <img src="{{ url_for('static', filename='K.gif') }}" alt="Keypoint Detection">
+                    <h3>Keypoint Detection</h3>
+                    <p>Visualize key points in your images for deeper insights.</p>
+                </div>
+                <div class="feature-card">
+                    <img src="{{ url_for('static', filename='I.gif') }}" alt="Easy to Use">
+                    <h3>Easy to Use</h3>
+                    <p>Simply upload an image and get results within seconds.</p>
+                </div>
+            </div>
+        </section>
+
+    <!-- About Us Section -->
+    <section class="about-us" id="about-us">
+        <h2>About Us</h2>
+        <p>We are a team of passionate AI enthusiasts dedicated to revolutionizing image classification and analysis. Our mission is to make powerful tools accessible to everyone, from professionals to hobbyists.</p>
+        <p>With Some understanding and experience in machine learning and computer vision, we strive to build innovative solutions that make sense of visual data. Whether you're a researcher, a business owner, or simply someone curious about AI, we aim to help you gain valuable insights through our intuitive platform.</p>
+        <p>Our team is committed to continuous improvement, leveraging the latest advancements in AI to provide accurate and insightful results for all users.</p>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <h2>Top Reviews</h2>
+        <div class="cards-container">
+            <!-- 10 Horizontal Cards -->
+            <div class="card">
+                <p>"This AI app changed the way I classify images! Super easy to use and powerful."</p>
+                <p><strong>- PMC-1</strong></p>
+            </div>
+            <div class="card">
+                <p>"Fantastic tool for anyone working in machine learning. Keypoint detection is a game-changer."</p>
+                <p><strong>- PMC-2</strong></p>
+            </div>
+            <div class="card">
+                <p>"The results are incredibly accurate, and the interface is super user-friendly. Highly recommend!"</p>
+                <p><strong>- Hamrish</strong></p>
+            </div>
+           
+            </div>
+        </div>
+    </section>
+
+    </main>
+    <footer>
+        &copy; 2024 ImageIQ. All rights reserved.
+    </footer>
+
+    <span id="cursorFollower" class="cursorFollower"></span>
+    <span id="cursorFollowerDot" class="cursorFollowerDot"></span>
+    
+    <script>
+       var xp = 0, mouseX = 0;
+        var yp = 0, mouseY = 0;
+        var xpDot = 0, mouseXDot = 0;
+        var ypDot = 0, mouseYDot = 0;
+
+        const cursorFollower = document.querySelector(".cursorFollower");
+        const cursorFollowerDot = document.querySelector(".cursorFollowerDot");
+
+        document.addEventListener("mousemove", (e) => {
+            mouseX = e.pageX;
+            mouseY = e.pageY;
+        });
+
+        setInterval(function () {
+            xp += (mouseX - xp) / 10;
+            yp += (mouseY - yp) / 10;
+
+            cursorFollower.style.left = xp + "px";
+            cursorFollower.style.top = yp + "px";
+        }, 20);
+
+        setInterval(function () {
+            xpDot += (mouseX - xpDot) / 15;
+            ypDot += (mouseY - ypDot) / 15;
+
+            cursorFollowerDot.style.left = xpDot + "px";
+            cursorFollowerDot.style.top = ypDot + "px";
+        }, 15);
+    </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+model.h5
+__pycache__/
+*.pyc
+env/
+*.log
